@@ -60,6 +60,7 @@ return [
         ['code' => 'ja', 'name' => 'Japanese'],
         ['code' => 'it', 'name' => 'Italian'],
         ['code' => 'lv', 'name' => 'Latvian'],
+        ['code' => 'lt', 'name' => 'Lithuanian'],
         ['code' => 'pl', 'name' => 'Polish'],
         ['code' => 'pt_BR', 'name' => 'Portuguese (Brazilian)'],
         ['code' => 'sr', 'name' => 'Serbian Latin'],
