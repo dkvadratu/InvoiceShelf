@@ -19,6 +19,7 @@ Homestead.yaml
 !storage/fonts/.gitkeep
 .DS_Store
 .php-cs-fixer.cache
+.htaccess
 /storage/fonts*
 package-lock.json
 /.dev/docker-compose.yml
