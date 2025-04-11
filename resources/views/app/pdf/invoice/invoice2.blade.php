@@ -30,12 +30,13 @@
         /* -- Header -- */
 
         .header-container {
-            background: #7675ff;
+            background: #fff;
             position: absolute;
             width: 100%;
             height: 141px;
             left: 0px;
-            top: -60px;
+            top: -50px;
+            border-top: 6px solid #000;
         }
 
         .header-section-left {
@@ -49,7 +50,7 @@
             padding-top: 45px;
             position: absolute;
             text-transform: capitalize;
-            color: #fff;
+            color: #000;
 
         }
 
@@ -59,12 +60,12 @@
             float: right;
             padding: 20px 30px 20px 0px;
             text-align: right;
-            color: white;
+            color: #000;
         }
 
         .header {
             font-size: 20px;
-            color: rgba(0, 0, 0, 0.7);
+            color: #000;
         }
 
         /*  -- Estimate Details -- */
@@ -113,7 +114,7 @@
             padding: 0 0 0 30px;
             display: inline;
             float: left;
-            width: 30%;
+            width: 45%;
         }
 
         .company-address-container h1 {
@@ -127,7 +128,7 @@
         .company-address {
             font-size: 10px;
             line-height: 15px;
-            color: #595959;
+            color: #2c2c2c;
             margin-top: 0px;
             word-wrap: break-word;
         }
@@ -135,10 +136,14 @@
         /* -- Billing -- */
 
         .billing-address-container {
-            display: block;
+            padding: 0 0 0 30px;
+            display: inline;
+            float: left;
+            width: 45%;
+            /*display: block;*/
             /* position: absolute; */
-            float: right;
-            padding: 0 40px 0 0;
+            /*float: right;*/
+            /*padding: 0 40px 0 0;*/
         }
 
         .billing-address-label {
@@ -149,7 +154,6 @@
         }
 
         .billing-address-name {
-            max-width: 250px;
             font-size: 15px;
             line-height: 22px;
             padding: 0px;
@@ -160,43 +164,9 @@
         .billing-address {
             font-size: 10px;
             line-height: 15px;
-            color: #595959;
+            color: #2c2c2c;
             padding: 0px;
             margin: 0px;
-            width: 170px;
-            word-wrap: break-word;
-        }
-
-        /* -- Shipping -- */
-
-        .shipping-address-container {
-            display: block;
-            float: right;
-            padding: 0 30px 0 0;
-        }
-
-        .shipping-address-label {
-            font-size: 12px;
-            line-height: 18px;
-            padding: 0px;
-            margin-bottom: 0px;
-        }
-
-        .shipping-address-name {
-            max-width: 250px;
-            font-size: 15px;
-            line-height: 22px;
-            padding: 0px;
-            margin-top: 0px;
-            margin-bottom: 0px;
-        }
-
-        .shipping-address {
-            font-size: 10px;
-            line-height: 15px;
-            color: #595959;
-            padding: 0px 30px 0px 30px;
-            width: 170px;
             word-wrap: break-word;
         }
 
@@ -214,11 +184,11 @@
         }
 
         .item-table-heading {
-            font-size: 13.5;
+            font-size: 13.5px;
             text-align: center;
             color: rgba(0, 0, 0, 0.85);
             padding: 5px;
-            color: #55547A;
+            color: #000;
         }
 
         tr.item-table-heading-row th {
@@ -233,11 +203,11 @@
         }
 
         .item-cell {
-            font-size: 13;
+            font-size: 13px;
             text-align: center;
             padding: 5px;
             padding-top: 10px;
-            color: #040405;
+            color: #2c2c2c;
         }
 
         .item-description {
@@ -268,7 +238,7 @@
 
         .total-table-attribute-label {
             font-size: 12px;
-            color: #55547A;
+            color: #000;
             text-align: left;
             padding-left: 10px;
         }
@@ -277,7 +247,7 @@
             font-weight: bold;
             text-align: right;
             font-size: 12px;
-            color: #040405;
+            color: #2c2c2c;
             padding-right: 10px;
             padding-top: 2px;
             padding-bottom: 2px;
@@ -313,7 +283,7 @@
             font-size: 15px;
             line-height: 22px;
             letter-spacing: 0.05em;
-            color: #040405;
+            color: #000;
             width: 108px;
             white-space: nowrap;
             height: 19.87px;
@@ -323,7 +293,7 @@
         /* -- Helpers -- */
 
         .text-primary {
-            color: #5851DB;
+            color: #000;
         }
 
         .text-center {
@@ -389,7 +359,7 @@
             <tr>
                 <td width="60%" class="header-section-left">
                     @if ($logo)
-                        <img class="header-logo" style="height:50px" src="{{ \App\Space\ImageUtils::toBase64Src($logo) }}" alt="Company Logo">
+                        <img class="header-logo" style="height:85px;" src="{{ \App\Space\ImageUtils::toBase64Src($logo) }}" alt="logo">
                     @elseif ($invoice->customer->company)
                         <h1 class="header-logo" style="padding-top: 0px;">
                             {{ $invoice->customer->company->name }}
@@ -411,22 +381,13 @@
     <div class="content-wrapper">
         <div class="address-container">
             <div class="company-address-container company-address">
+                <h2 style="margin-bottom: 0;">@lang('pdf_bill_from')</h2>
                 {!! $company_address !!}
             </div>
 
-            @if ($shipping_address !== '</br>')
-                <div class="shipping-address-container shipping-address">
-                    @if ($shipping_address)
-                        <b>@lang('pdf_ship_to')</b> <br>
-                        {!! $shipping_address !!}
-                    @endif
-                </div>
-            @endif
-
-
-            <div class="billing-address-container billing-address" @if ($shipping_address === '</br>') style="float:right; margin-right:30px;" @endif>
+            <div class="billing-address-container billing-address">
+                <h2 style="margin-bottom: 0;">@lang('pdf_bill_to')</h2>
                 @if ($billing_address)
-                    <b>@lang('pdf_bill_to')</b> <br>
                     {!! $billing_address !!}
                 @endif
             </div>
