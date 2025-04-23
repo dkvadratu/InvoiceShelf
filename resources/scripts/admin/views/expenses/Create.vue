@@ -391,7 +391,7 @@ const rules = computed(() => {
       base_tax: {
         minValue: helpers.withMessage(
           t('validation.price_minvalue'),
-          minValue(0.1)
+          minValue(0.0)
         ),
         maxLength: helpers.withMessage(
           t('validation.price_maxlength'),
