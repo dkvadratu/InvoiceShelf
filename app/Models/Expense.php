@@ -281,4 +281,15 @@ class Expense extends Model implements HasMedia
 
         return true;
     }
+
+    /**
+     * Register the media collections with certain disk.
+     */
+    public function registerMediaCollections(): void
+    {
+        $this
+            ->addMediaCollection('receipts')
+            ->useDisk('receipts');
+    }
+
 }
