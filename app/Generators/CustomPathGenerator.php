@@ -3,6 +3,7 @@
 namespace App\Generators;
 
 use App\Models\Estimate;
+use App\Models\Expense;
 use App\Models\Invoice;
 use App\Models\Payment;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -38,6 +39,8 @@ class CustomPathGenerator implements PathGenerator
             $folderName = 'Estimates';
         } elseif ($media->model_type == Payment::class) {
             $folderName = 'Payments';
+        } elseif ($media->model_type == Expense::class) {
+            $folderName = 'Expenses';
         } else {
             $folderName = $media->getKey();
         }
