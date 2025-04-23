@@ -23,6 +23,8 @@ class ExpenseFactory extends Factory
      */
     public function definition(): array
     {
+        $base_amount = $this->faker->randomDigitNotNull();
+        $base_tax = $this->faker->randomDigitNotNull();
         return [
             'expense_date' => $this->faker->date('Y-m-d', 'now'),
             'expense_category_id' => ExpenseCategory::factory(),
@@ -32,7 +34,9 @@ class ExpenseFactory extends Factory
             'attachment_receipt' => null,
             'customer_id' => Customer::factory(),
             'exchange_rate' => $this->faker->randomDigitNotNull(),
-            'base_amount' => $this->faker->randomDigitNotNull(),
+            'base_amount' => $base_amount,
+            'base_tax' => $base_tax,
+            'base_total' => $base_amount+$base_tax,
             'currency_id' => Currency::find(1)->id,
         ];
     }

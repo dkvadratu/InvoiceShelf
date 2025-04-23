@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Requests\ExpenseRequest;
 use App\Traits\HasCustomFieldsTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -227,13 +228,13 @@ class Expense extends Model implements HasMedia
         $query->select(
             DB::raw('
                 count(*) as expenses_count,
-                sum(base_amount) as total_amount,
+                sum(base_total) as total_amount,
                 expense_category_id')
         )
             ->groupBy('expense_category_id');
     }
 
-    public static function createExpense($request)
+    public static function createExpense(ExpenseRequest $request)
     {
         $expense = self::create($request->getExpensePayload());
 
