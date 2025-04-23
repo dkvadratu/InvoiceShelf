@@ -255,7 +255,7 @@ class Expense extends Model implements HasMedia
         return $expense;
     }
 
-    public function updateExpense($request)
+    public function updateExpense(ExpenseRequest $request)
     {
         $data = $request->getExpensePayload();
 
@@ -267,7 +267,8 @@ class Expense extends Model implements HasMedia
             ExchangeRateLog::addExchangeRateLog($this);
         }
 
-        if (isset($request->is_attachment_receipt_removed) && (bool) $request->is_attachment_receipt_removed) {
+        if (isset($request->is_attachment_receipt_removed) &&
+            filter_var($request->is_attachment_receipt_removed, FILTER_VALIDATE_BOOLEAN)) {
             $this->clearMediaCollection('receipts');
         }
         if ($request->hasFile('attachment_receipt')) {
