@@ -4,6 +4,8 @@ export default {
   expense_category_id: null,
   expense_date: moment().format('YYYY-MM-DD'),
   amount: 100,
+  base_tax: 100,
+  base_total: 100,
   notes: '',
   attachment_receipt: null,
   customer_id: '',
