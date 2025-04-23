@@ -34,6 +34,8 @@ test('create expense', function () {
         'amount' => 150,
         'exchange_rate' => 76.217498,
         'base_amount' => 11432.6247,
+        'base_tax' => 2400.86,
+        'base_total' => 13833.4847,
     ]);
 
     postJson('api/v1/expenses', $expense)->assertStatus(201);
@@ -44,6 +46,8 @@ test('create expense', function () {
         'amount' => $expense['amount'],
         'exchange_rate' => $expense['exchange_rate'],
         'base_amount' => $expense['base_amount'],
+        'base_tax' => $expense['base_tax'],
+        'base_total' => $expense['base_total'],
     ]);
 });
 
@@ -67,6 +71,9 @@ test('get expense data', function () {
         'notes' => $expense['notes'],
         'expense_category_id' => $expense['expense_category_id'],
         'amount' => $expense['amount'],
+        'base_amount' => $expense['base_amount'],
+        'base_tax' => $expense['base_tax'],
+        'base_total' => $expense['base_total'],
     ]);
 });
 
@@ -84,6 +91,9 @@ test('update expense', function () {
         'notes' => $expense2['notes'],
         'expense_category_id' => $expense2['expense_category_id'],
         'amount' => $expense2['amount'],
+        'base_amount' => $expense2['base_amount'],
+        'base_tax' => $expense2['base_tax'],
+        'base_total' => $expense2['base_total'],
     ]);
 });
 
@@ -143,6 +153,8 @@ test('update expense with EUR currency', function () {
         'amount' => 150,
         'exchange_rate' => 76.217498,
         'base_amount' => 11432.6247,
+        'base_tax' => 2400.86,
+        'base_total' => 13833.4847,
     ]);
 
     putJson('api/v1/expenses/'.$expense->id, $expense2)->assertOk();
@@ -153,5 +165,7 @@ test('update expense with EUR currency', function () {
         'amount' => $expense2['amount'],
         'exchange_rate' => $expense2['exchange_rate'],
         'base_amount' => $expense2['base_amount'],
+        'base_tax' => $expense2['base_tax'],
+        'base_total' => $expense2['base_total'],
     ]);
 });

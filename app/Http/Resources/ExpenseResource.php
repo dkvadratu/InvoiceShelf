@@ -30,6 +30,8 @@ class ExpenseResource extends JsonResource
             'exchange_rate' => $this->exchange_rate,
             'currency_id' => $this->currency_id,
             'base_amount' => $this->base_amount,
+            'base_tax' => $this->base_tax,
+            'base_total' => $this->base_total,
             'payment_method_id' => $this->payment_method_id,
             'customer' => $this->when($this->customer()->exists(), function () {
                 return new CustomerResource($this->customer);

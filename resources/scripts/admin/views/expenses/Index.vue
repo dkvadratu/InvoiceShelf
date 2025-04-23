@@ -184,6 +184,31 @@
           />
         </template>
 
+        <template #cell-currency="{ row }">
+          {{ row.data.currency.code }}
+        </template>
+
+        <template #cell-base_amount="{ row }">
+          <BaseFormatMoney
+            :amount="row.data.base_amount"
+            :currency="row.data.currency"
+          />
+        </template>
+
+        <template #cell-base_tax="{ row }">
+          <BaseFormatMoney
+            :amount="row.data.base_tax"
+            :currency="row.data.currency"
+          />
+        </template>
+
+        <template #cell-base_total="{ row }">
+          <BaseFormatMoney
+            :amount="row.data.base_total"
+            :currency="row.data.currency"
+          />
+        </template>
+
         <template #cell-expense_date="{ row }">
           {{ row.data.formatted_expense_date }}
         </template>
@@ -290,6 +315,10 @@ const expenseColumns = computed(() => {
     { key: 'user_name', label: t('expenses.customer') },
     { key: 'notes', label: t('expenses.note') },
     { key: 'amount', label: t('expenses.amount') },
+    { key: 'currency', label: t('expenses.currency') },
+    { key: 'base_amount', label: t('expenses.base_amount') },
+    { key: 'base_tax', label: t('expenses.base_tax') },
+    { key: 'base_total', label: t('expenses.base_total') },
     {
       key: 'actions',
       sortable: false,
