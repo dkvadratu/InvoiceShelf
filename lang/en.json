@@ -407,6 +407,7 @@
     "invoice": "Invoice | Invoices",
     "invoice_number": "Invoice Number",
     "ref_number": "Ref Number",
+    "invoice_url": "Invoice Url",
     "contact": "Contact",
     "add_item": "Add an Item",
     "date": "Date",
