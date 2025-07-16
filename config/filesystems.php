@@ -60,6 +60,11 @@ return [
             'driver' => 'local',
             'root' => storage_path('app/templates/pdf'),
         ],
+
+        'receipts' => [
+            'driver' => 'local',
+            'root' => storage_path('app/receipts'),
+        ],
     ],
 
 ];

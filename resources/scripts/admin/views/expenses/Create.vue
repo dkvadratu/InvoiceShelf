@@ -45,7 +45,7 @@
               <template #left="slotProps">
                 <BaseIcon
                   v-if="!isSaving"
-                  name="SaveIcon"
+                  name="ArrowDownOnSquareIcon"
                   :class="slotProps.class"
                 />
               </template>
@@ -134,41 +134,86 @@
               @input="v$.currentExpense.amount.$touch()"
             />
           </BaseInputGroup>
-          <BaseInputGroup
-            :label="$t('expenses.currency')"
-            :content-loading="isFetchingInitialData"
-            :error="
+
+          <BaseInputGrid>
+            <!-- Currency select -->
+            <BaseInputGroup
+              :label="$t('expenses.currency')"
+              :content-loading="isFetchingInitialData"
+              :error="
               v$.currentExpense.currency_id.$error &&
               v$.currentExpense.currency_id.$errors[0].$message
             "
-            required
-          >
-            <BaseMultiselect
-              v-model="expenseStore.currentExpense.currency_id"
-              value-prop="id"
-              label="name"
-              track-by="name"
-              :content-loading="isFetchingInitialData"
-              :options="globalStore.currencies"
-              searchable
-              :can-deselect="false"
-              :placeholder="$t('customers.select_currency')"
-              :invalid="v$.currentExpense.currency_id.$error"
-              class="w-full"
-              @update:modelValue="onCurrencyChange"
+              required
             >
-            </BaseMultiselect>
-          </BaseInputGroup>
+              <BaseMultiselect
+                v-model="expenseStore.currentExpense.currency_id"
+                value-prop="id"
+                label="name"
+                track-by="name"
+                :content-loading="isFetchingInitialData"
+                :options="globalStore.currencies"
+                searchable
+                :can-deselect="false"
+                :placeholder="$t('customers.select_currency')"
+                :invalid="v$.currentExpense.currency_id.$error"
+                class="w-full"
+                @update:modelValue="onCurrencyChange"
+              >
+              </BaseMultiselect>
+            </BaseInputGroup>
 
-          <!-- Exchange rate converter -->
-          <ExchangeRateConverter
-            :store="expenseStore"
-            store-prop="currentExpense"
-            :v="v$.currentExpense"
-            :is-loading="isFetchingInitialData"
-            :is-edit="isEdit"
-            :customer-currency="expenseStore.currentExpense.currency_id"
-          />
+            <!-- Exchange rate converter -->
+            <ExchangeRateConverter
+              :store="expenseStore"
+              store-prop="currentExpense"
+              :v="v$.currentExpense"
+              :is-loading="isFetchingInitialData"
+              :is-edit="isEdit"
+              :customer-currency="expenseStore.currentExpense.currency_id"
+            />
+          </BaseInputGrid>
+
+          <BaseInputGrid>
+            <!-- Base tax -->
+            <BaseInputGroup
+              :label="$t('expenses.base_tax')"
+              :error="
+              v$.currentExpense.base_tax.$error &&
+              v$.currentExpense.base_tax.$errors[0].$message
+            "
+              :content-loading="isFetchingInitialData"
+            >
+              <BaseMoney
+                :key="expenseStore.currentExpense.selectedCurrency"
+                v-model="amountBaseTax"
+                class="focus:border focus:border-solid focus:border-primary-500"
+                :invalid="v$.currentExpense.base_tax.$error"
+                :currency="expenseStore.currentExpense.selectedCurrency"
+                @input="v$.currentExpense.base_tax.$touch()"
+              />
+            </BaseInputGroup>
+
+            <!-- Base total -->
+            <BaseInputGroup
+              :label="$t('expenses.base_total')"
+              :error="
+              v$.currentExpense.base_total.$error &&
+              v$.currentExpense.base_total.$errors[0].$message
+            "
+              :content-loading="isFetchingInitialData"
+              required
+            >
+              <BaseMoney
+                :key="expenseStore.currentExpense.selectedCurrency"
+                v-model="amountBaseTotal"
+                class="focus:border focus:border-solid focus:border-primary-500"
+                :invalid="v$.currentExpense.base_total.$error"
+                :currency="expenseStore.currentExpense.selectedCurrency"
+                @input="v$.currentExpense.base_total.$touch()"
+              />
+            </BaseInputGroup>
+          </BaseInputGrid>
 
           <BaseInputGroup
             :content-loading="isFetchingInitialData"
@@ -264,7 +309,7 @@
               <template #left="slotProps">
                 <BaseIcon
                   v-if="!isSaving"
-                  name="SaveIcon"
+                  name="ArrowDownOnSquareIcon"
                   :class="slotProps.class"
                 />
               </template>
@@ -304,6 +349,7 @@ import ExpenseCustomFields from '@/scripts/admin/components/custom-fields/Create
 import CategoryModal from '@/scripts/admin/components/modal-components/CategoryModal.vue'
 import ExchangeRateConverter from '@/scripts/admin/components/estimate-invoice-common/ExchangeRateConverter.vue'
 import { useGlobalStore } from '@/scripts/admin/stores/global'
+import BaseInputGrid from "@/scripts/components/base/BaseInputGrid.vue";
 
 const customerStore = useCustomerStore()
 const companyStore = useCompanyStore()
@@ -332,6 +378,27 @@ const rules = computed(() => {
       },
 
       amount: {
+        required: helpers.withMessage(t('validation.required'), required),
+        minValue: helpers.withMessage(
+          t('validation.price_minvalue'),
+          minValue(0.1)
+        ),
+        maxLength: helpers.withMessage(
+          t('validation.price_maxlength'),
+          maxLength(20)
+        ),
+      },
+      base_tax: {
+        minValue: helpers.withMessage(
+          t('validation.price_minvalue'),
+          minValue(0.0)
+        ),
+        maxLength: helpers.withMessage(
+          t('validation.price_maxlength'),
+          maxLength(20)
+        ),
+      },
+      base_total: {
         required: helpers.withMessage(t('validation.required'), required),
         minValue: helpers.withMessage(
           t('validation.price_minvalue'),
@@ -374,6 +441,22 @@ const amountData = computed({
   get: () => expenseStore.currentExpense.amount / 100,
   set: (value) => {
     expenseStore.currentExpense.amount = Math.round(value * 100)
+  },
+})
+const amountBaseTax = computed({
+  get: () => expenseStore.currentExpense.base_tax / 100,
+  set: (value) => {
+    expenseStore.currentExpense.base_tax = Math.round(value * 100)
+    expenseStore.currentExpense.base_total = Math.round(
+      (expenseStore.currentExpense.amount +
+        expenseStore.currentExpense.base_tax)
+    )
+  },
+})
+const amountBaseTotal = computed({
+  get: () => expenseStore.currentExpense.base_total / 100,
+  set: (value) => {
+    expenseStore.currentExpense.base_total = Math.round(value * 100)
   },
 })
 

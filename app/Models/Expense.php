@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Requests\ExpenseRequest;
 use App\Traits\HasCustomFieldsTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -227,13 +228,13 @@ class Expense extends Model implements HasMedia
         $query->select(
             DB::raw('
                 count(*) as expenses_count,
-                sum(base_amount) as total_amount,
+                sum(base_total) as total_amount,
                 expense_category_id')
         )
             ->groupBy('expense_category_id');
     }
 
-    public static function createExpense($request)
+    public static function createExpense(ExpenseRequest $request)
     {
         $expense = self::create($request->getExpensePayload());
 
@@ -254,7 +255,7 @@ class Expense extends Model implements HasMedia
         return $expense;
     }
 
-    public function updateExpense($request)
+    public function updateExpense(ExpenseRequest $request)
     {
         $data = $request->getExpensePayload();
 
@@ -266,7 +267,8 @@ class Expense extends Model implements HasMedia
             ExchangeRateLog::addExchangeRateLog($this);
         }
 
-        if (isset($request->is_attachment_receipt_removed) && (bool) $request->is_attachment_receipt_removed) {
+        if (isset($request->is_attachment_receipt_removed) &&
+            filter_var($request->is_attachment_receipt_removed, FILTER_VALIDATE_BOOLEAN)) {
             $this->clearMediaCollection('receipts');
         }
         if ($request->hasFile('attachment_receipt')) {
@@ -280,4 +282,15 @@ class Expense extends Model implements HasMedia
 
         return true;
     }
+
+    /**
+     * Register the media collections with certain disk.
+     */
+    public function registerMediaCollections(): void
+    {
+        $this
+            ->addMediaCollection('receipts')
+            ->useDisk('receipts');
+    }
+
 }
