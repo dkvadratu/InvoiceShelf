@@ -197,6 +197,7 @@ async function getFields() {
           { label: 'Due Date', value: 'INVOICE_DUE_DATE' },
           { label: 'Number', value: 'INVOICE_NUMBER' },
           { label: 'Ref Number', value: 'INVOICE_REF_NUMBER' },
+          { label: 'Invoice Url', value: 'INVOICE_URL' },
           ...invoiceFields.value.map((i) => ({
             label: i.label,
             value: i.slug,
