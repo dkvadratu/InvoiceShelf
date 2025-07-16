@@ -38,6 +38,12 @@ class ExpenseRequest extends FormRequest
             'amount' => [
                 'required',
             ],
+            'base_tax' => [
+                'nullable',
+            ],
+            'base_total' => [
+                'required',
+            ],
             'customer_id' => [
                 'nullable',
             ],
@@ -78,6 +84,8 @@ class ExpenseRequest extends FormRequest
                 'company_id' => $this->header('company'),
                 'exchange_rate' => $exchange_rate,
                 'base_amount' => $this->amount * $exchange_rate,
+                'base_tax' => $this->base_tax ? $this->base_tax * $exchange_rate : null,
+                'base_total' => $this->base_total * $exchange_rate,
                 'currency_id' => $current_currency,
             ])
             ->toArray();

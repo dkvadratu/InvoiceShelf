@@ -75,7 +75,7 @@ class DashboardController extends Controller
                     [$start->format('Y-m-d'), $end->format('Y-m-d')]
                 )
                     ->whereCompany()
-                    ->sum('base_amount')
+                    ->sum('base_total')
             );
             array_push(
                 $receipt_totals,
@@ -119,7 +119,7 @@ class DashboardController extends Controller
             [$startDate->format('Y-m-d'), $start->format('Y-m-d')]
         )
             ->whereCompany()
-            ->sum('base_amount');
+            ->sum('base_total');
 
         $total_net_income = (int) $total_receipts - (int) $total_expenses;
 
